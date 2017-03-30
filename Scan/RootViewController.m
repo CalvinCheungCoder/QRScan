@@ -25,7 +25,8 @@
     UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(50, 200, [UIScreen mainScreen].bounds.size.width - 100, 50)];
     [btn setTitle:@"Scan" forState:UIControlStateNormal];
     btn.backgroundColor = [UIColor grayColor];
-    btn.layer.cornerRadius = 8;
+    btn.layer.cornerRadius = 3;
+    btn.layer.masksToBounds = YES;
     [btn addTarget:self action:@selector(btnClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
 }

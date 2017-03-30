@@ -15,15 +15,14 @@
 #define Width [UIScreen mainScreen].bounds.size.width
 #define Height [UIScreen mainScreen].bounds.size.height
 
-@interface ScanViewController ()<AVCaptureMetadataOutputObjectsDelegate,UIAlertViewDelegate>{
+@interface ScanViewController () <AVCaptureMetadataOutputObjectsDelegate,UIAlertViewDelegate> {
     
-    UILabel * tipLabel;
-    // 闪光灯
-    UIButton * flashBtn;
+    UILabel * tipLabel; // 操作提示
+    UIButton * flashBtn; // 闪光灯
 }
 
 @property (nonatomic, strong) AVCaptureSession *session;
-@property (nonatomic, strong) UIView *maskView;
+@property (nonatomic, strong) UIView *maskView; // 遮罩
 @property (nonatomic, strong) UIView *scanWindow;
 @property (nonatomic, strong) UIImageView *scanNetImageView;
 
@@ -43,7 +42,6 @@
     [super viewWillDisappear:animated];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -61,8 +59,6 @@
     [self setupScanWindowView];
     // 4.开始扫描
     [self beginScanning];
-    
-    [self resumeAnimation];
 }
 
 #pragma mark -
@@ -132,7 +128,6 @@
     else{
         [self turnTorchOn:NO];
     }
-    
 }
 
 - (void)turnTorchOn:(BOOL)on{
@@ -156,7 +151,6 @@
         }
     }
 }
-
 
 #pragma mark -
 #pragma mark - 扫描区域
@@ -239,6 +233,7 @@
     return CGRectMake(x, y, width, height);
 }
 
+#pragma mark --
 #pragma mark -- 动画
 - (void)resumeAnimation{
     
@@ -248,12 +243,10 @@
         CFTimeInterval pauseTime = _scanNetImageView.layer.timeOffset;
         // 2.根据媒体时间计算出准确的启动动画时间，对之前暂停动画的时间进行修正
         CFTimeInterval beginTime = CACurrentMediaTime() - pauseTime;
-        
         // 3.要把偏移时间清零
         [_scanNetImageView.layer setTimeOffset:0.0];
         // 4.设置图层的开始动画时间
         [_scanNetImageView.layer setBeginTime:beginTime];
-        
         [_scanNetImageView.layer setSpeed:1.0];
         
     }else{
@@ -280,7 +273,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 #pragma mark --
 #pragma mark -- 获取二维码
 -(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection{
@@ -289,13 +281,10 @@
         
         [_session stopRunning];
         AVMetadataMachineReadableCodeObject *metadataObject = [metadataObjects objectAtIndex : 0 ];
-        
         // 二维码信息
         NSString *str = metadataObject.stringValue;
-        
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"二维码信息：" message:str delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         [alert show];
-        
     }
 }
 
